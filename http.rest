@@ -1,0 +1,14 @@
+GET http://localhost:3000/api/members
+
+###
+
+GET http://localhost:3000/api/members/60e5a81bf8c0be459c374e03
+
+###
+
+POST http://localhost:3000/api/members
+Content-Type: application/json
+
+{
+    "name": "Shahab Athar",
+}
