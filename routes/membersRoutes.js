@@ -8,7 +8,7 @@ router.get('/', async (req, res) => {
         const members = await Member.find()
         res.json(members)
     } catch (err) {
-        res.status(500).json({ error: err.message })
+        res.status(500).json({ message: err.message })
     }
 })
 
@@ -25,16 +25,21 @@ router.post('/', async (req, res) => {
         const newMember = await member.save()
         res.status(201).json(newMember)
     } catch (err) {
-        return res.status(400).json({ message: "Not" })
+        res.status(400).json({ message: err.message })
     }
 })
 
-router.patch('/:id', (req, res) => {
+router.patch('/:id', getMember,(req, res) => {
     res.send("Hello World")
 })
 
-router.delete('/:id', (req, res) => {
-    res.send("Hello World")
+router.delete('/:id', getMember, async (req, res) => {
+    try {
+        await res.member.remove()
+        res.json({ message: "Deleted Member" })
+    } catch (err) {
+        res.status(500).json({ message: err.message })
+    }
 })
 
 async function getMember(req, res, next) {
@@ -42,7 +47,7 @@ async function getMember(req, res, next) {
     try {
         member = await Member.findById(req.params.id)
         if (member === null) {
-            return res.status(404).json({ error: "Member Not Found" })
+            return res.status(404).json({ message: "Member Not Found" })
         }
     } catch (err) {
         return res.status(500)
